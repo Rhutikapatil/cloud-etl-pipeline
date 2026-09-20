@@ -1,0 +1,71 @@
+# Local, reproducible Airflow + Postgres stack.
+#
+# This was verified to run in the build environment WITHOUT Docker (no
+# Docker daemon available there — see README) using `airflow db migrate`
+# + `airflow dags test` directly against a locally installed Postgres.
+# This compose file is the recommended way to run it anywhere Docker *is*
+# available (which is most places, including a normal laptop):
+#
+#   docker compose up airflow-init   # one-time DB init
+#   docker compose up                # starts webserver (localhost:8080) + scheduler
+#
+# The DAG will appear in the Airflow UI and run on its @weekly schedule,
+# or trigger it manually from the UI / `docker compose exec airflow-scheduler airflow dags trigger covid_surveillance_etl`.
+
+x-airflow-common: &airflow-common
+  image: apache/airflow:2.10.5-python3.11
+  environment:
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-metadata-db/airflow
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./scripts:/opt/airflow/scripts
+    - ./data:/opt/airflow/data
+  depends_on:
+    - airflow-metadata-db
+    - warehouse-db
+
+services:
+  # Airflow's own internal metadata database (task state, schedules, etc.)
+  airflow-metadata-db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - airflow_metadata:/var/lib/postgresql/data
+
+  # The pipeline's TARGET warehouse — separate from Airflow's own metadata
+  # DB on purpose, the way a production Airflow (e.g. MWAA) is always
+  # separate from the warehouse it loads.
+  warehouse-db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: etl_warehouse
+    ports:
+      - "5432:5432"
+    volumes:
+      - warehouse_data:/var/lib/postgresql/data
+
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: airflow db migrate
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+
+volumes:
+  airflow_metadata:
+  warehouse_data:
