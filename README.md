@@ -168,6 +168,20 @@ real one.
 ## Stack
 
 Python · Apache Airflow · PostgreSQL · pandas · Terraform (AWS) · Docker
+## Skills Demonstrated
+
+- Python data engineering
+- ETL pipeline development
+- Apache Airflow orchestration
+- PostgreSQL data warehousing
+- Data validation and reconciliation
+- Idempotent database loading
+- Real-world data correction handling
+- Unit and regression testing with pytest
+- Docker-based local development
+- Infrastructure as Code with Terraform
+- AWS architecture design
+- Public health data processing
 
 ## Author
 
