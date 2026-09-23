@@ -183,6 +183,21 @@ Python · Apache Airflow · PostgreSQL · pandas · Terraform (AWS) · Docker
 - AWS architecture design
 - Public health data processing
 
+## Project Status
+
+| Component | Status |
+| --- | --- |
+| Data extraction from public source | ✅ Executed |
+| Data-quality validation | ✅ Executed |
+| Daily-to-weekly transformation | ✅ Executed |
+| PostgreSQL warehouse load | ✅ Executed |
+| Post-load reconciliation | ✅ Executed |
+| Unit and regression tests | ✅ Passed |
+| Docker environment | ✅ Configured |
+| AWS infrastructure design | 📐 Reference architecture |
+| Terraform configuration | 📐 Infrastructure-as-Code example |
+| Amazon MWAA deployment | 📐 Deployment design |
+
 ## Author
 
 Rhutika Patil — M.S. Bioinformatics, NC State University
