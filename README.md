@@ -60,7 +60,24 @@ locks that in. Leaving this in the README instead of quietly fixing it is
 deliberate: catching this kind of thing is the actual job.
 
 ## Pipeline
+```mermaid
+flowchart LR
+    A[NYT COVID-19<br/>Public Data] --> B[Extract]
+    B --> C[Raw Data Landing]
+    C --> D[Validate]
+    D --> E[Transform to<br/>Weekly Metrics]
+    E --> F[PostgreSQL<br/>Warehouse]
+    F --> G[Reconciliation<br/>Check]
 
+    H[Apache Airflow] --> B
+    H --> D
+    H --> E
+    H --> F
+    H --> G
+
+    I[Docker] -. Local Environment .-> H
+    J[Terraform / AWS] -. Cloud Architecture .-> H
+```
 ```
 extract_us_states → validate_raw → transform_to_weekly → load_to_warehouse → reconcile_row_counts
 ```
