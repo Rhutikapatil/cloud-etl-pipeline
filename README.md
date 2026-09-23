@@ -12,6 +12,19 @@ surveillance data, validates it, transforms cumulative counts into
 incident weekly counts, and loads it into a Postgres warehouse — with a
 data-quality gate before transform and a reconciliation check after load.
 
+## Project Highlights
+
+- Built an end-to-end ETL pipeline orchestrated with Apache Airflow
+- Extracted real public health surveillance data from a live HTTPS source
+- Implemented schema, null, row-count, and state-count data-quality checks
+- Converted cumulative daily counts into incident weekly metrics
+- Handled real-world downward data corrections without hiding them
+- Loaded transformed data into PostgreSQL using idempotent upserts
+- Added post-load reconciliation to verify warehouse completeness
+- Wrote unit and regression tests with `pytest`
+- Containerized the local environment with Docker
+- Designed AWS deployment infrastructure using Terraform, S3, RDS, and MWAA
+  
 ## This actually ran — here's the log
 
 ```
