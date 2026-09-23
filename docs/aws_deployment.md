@@ -72,11 +72,8 @@ the `provider` block in Terraform change.
 
 ## What's actually verified vs. what's a reference
 
-- **Verified, ran end-to-end in this build**: extract from a real public
-  data source over HTTPS → validate → transform → load into real
-  Postgres → reconcile. See the main README's run log.
-- **Reference, not applied**: the `infra/main.tf` Terraform and the MWAA
-  sketch above — deploying them needs a real AWS account and credentials
-  that weren't available in this build environment. They're written to
-  `terraform plan` cleanly against a real account, not to be taken on
-  faith.
+- **Verified locally:** The ETL workflow was executed end-to-end using a real public data source: extract over HTTPS → validate → transform → load into PostgreSQL → reconcile. The execution log is included in the main README.
+
+- **Cloud deployment reference:** The Terraform configuration in `infra/main.tf` and the MWAA configuration shown above demonstrate how the local architecture maps to AWS services including S3, RDS PostgreSQL, AWS Secrets Manager, and Amazon MWAA.
+
+- **Not deployed in this build:** The AWS infrastructure was not provisioned because cloud credentials and an AWS deployment environment were not used for this portfolio build. The infrastructure code is included to demonstrate cloud architecture and Infrastructure-as-Code design.
